@@ -2,9 +2,9 @@
 
 namespace Ditscheri\EloquentSearch;
 
+use Ditscheri\EloquentSearch\Commands\EloquentSearchCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Ditscheri\EloquentSearch\Commands\EloquentSearchCommand;
 
 class EloquentSearchServiceProvider extends PackageServiceProvider
 {

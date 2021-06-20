@@ -2,9 +2,9 @@
 
 namespace Ditscheri\EloquentSearch\Tests;
 
+use Ditscheri\EloquentSearch\EloquentSearchServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Ditscheri\EloquentSearch\EloquentSearchServiceProvider;
 
 class TestCase extends Orchestra
 {
