@@ -1,22 +1,22 @@
 {
-    "name": "vendor_slug/package_slug",
-    "description": ":package_description",
+    "name": "ditscheri/eloquent-search",
+    "description": "This is my package EloquentSearch",
     "keywords": [
-        ":vendor_name",
+        "ditscheri",
         "laravel",
-        "package_slug"
+        "eloquent-search"
     ],
-    "homepage": "https://github.com/vendor_slug/package_slug",
+    "homepage": "https://github.com/ditscheri/eloquent-search",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Daniel Bakan",
+            "email": "daniel@ditscheri.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^7.4",
         "spatie/laravel-package-tools": "^1.4.3",
         "illuminate/contracts": "^8.37"
     },
@@ -30,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Ditscheri\\EloquentSearch\\": "src",
+            "Ditscheri\\EloquentSearch\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Ditscheri\\EloquentSearch\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -50,10 +50,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Ditscheri\\EloquentSearch\\EloquentSearchServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\SkeletonFacade"
+                "EloquentSearch": "Ditscheri\\EloquentSearch\\EloquentSearchFacade"
             }
         }
     },

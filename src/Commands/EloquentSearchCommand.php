@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Ditscheri\EloquentSearch\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class EloquentSearchCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'eloquent-search';
 
     public $description = 'My command';
 

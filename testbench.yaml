@@ -1,2 +1,2 @@
 providers:
-  - VendorName\Skeleton\SkeletonServiceProvider
+  - Ditscheri\EloquentSearch\EloquentSearchServiceProvider

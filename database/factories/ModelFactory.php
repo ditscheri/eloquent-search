@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton\Database\Factories;
+namespace Ditscheri\EloquentSearch\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
