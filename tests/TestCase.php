@@ -3,7 +3,6 @@
 namespace Ditscheri\EloquentSearch\Tests;
 
 use Ditscheri\EloquentSearch\EloquentSearchServiceProvider;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -11,10 +10,23 @@ class TestCase extends Orchestra
     public function setUp(): void
     {
         parent::setUp();
+    }
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Ditscheri\\EloquentSearch\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
+    public function getEnvironmentSetUp($app)
+    {
+        // We will expect the correct MySQL syntax in our tests
+        // without actually firing any queries.
+
+        config()->set('database.default', 'testing');
+
+        config()->set('database.connections.testing', [
+            'driver' => 'mysql',
+            'host' => '0.0.0.0',
+            'username' => 'foo',
+            'password' => 'bar',
+            'database' => '_testing_',
+            'prefix' => '',
+        ]);
     }
 
     protected function getPackageProviders($app)
@@ -22,15 +34,5 @@ class TestCase extends Orchestra
         return [
             EloquentSearchServiceProvider::class,
         ];
-    }
-
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
-
-        /*
-        include_once __DIR__.'/../database/migrations/create_eloquent-search_table.php.stub';
-        (new \CreatePackageTable())->up();
-        */
     }
 }
