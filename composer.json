@@ -51,10 +51,7 @@
         "laravel": {
             "providers": [
                 "Ditscheri\\EloquentSearch\\EloquentSearchServiceProvider"
-            ],
-            "aliases": {
-                "EloquentSearch": "Ditscheri\\EloquentSearch\\EloquentSearchFacade"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
