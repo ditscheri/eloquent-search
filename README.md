@@ -9,6 +9,8 @@
 
 This package lets you perform fast and local searches on your Eloquent Models. You can search foreign columns of related models too.
 
+The approach is based on a gist by Jonathan Reinink (https://gist.github.com/reinink/28bd174087e929ffa1f150e3fe8ffbfa).
+
 ## Installation
 
 You can install the package via composer:
