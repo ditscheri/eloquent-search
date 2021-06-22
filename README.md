@@ -33,7 +33,7 @@ return [
 
 ```php
 // Model
-class Podcasts extends Model
+class Podcast extends Model
 {
     use \Ditscheri\EloquentSearch\Searchable;
 
