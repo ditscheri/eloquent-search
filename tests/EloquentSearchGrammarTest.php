@@ -331,6 +331,22 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
+    /** @test */
+    public function it_bails_out_for_empty_terms()
+    {
+        $builder = User::search(null);
+
+        $this->assertSame(
+            'select * from `users`',
+            $builder->toSql()
+        );
+
+        $this->assertSame(
+            [],
+            $builder->getBindings()
+        );
+    }
+
     protected function trimLines(string $sql)
     {
         return str_replace(
