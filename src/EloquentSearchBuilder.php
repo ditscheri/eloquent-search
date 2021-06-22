@@ -12,13 +12,13 @@ class EloquentSearchBuilder
 {
     protected Builder $query;
 
-    protected array $columns;
+    protected Collection $columnGroups;
 
     public function __construct(Builder $query, array $columns)
     {
         $this->query = $query;
 
-        $this->columns = $columns;
+        $this->columnGroups = $this->extractColumnGroups($columns);
     }
 
     public function apply(string $term = null): Builder
@@ -27,17 +27,9 @@ class EloquentSearchBuilder
             return $this->query;
         }
 
-        if (empty($this->columns)) {
+        if ($this->columnGroups->isEmpty()) {
             return $this->query;
         }
-
-        // rename to $groups
-        $columnGroups = $this->extractColumnGroups($this->columns);
-
-        // If we're only searching the local table, we can keep it simple:
-        // if($columnGroups->count() === 1 && $columnGroups->keys()->first() === '') {
-        //     // ..
-        // }
 
         collect(str_getcsv($term, ' ', '"'))
             ->filter()
@@ -46,7 +38,7 @@ class EloquentSearchBuilder
                 fn (string $term) => $this->query->whereIn(
                     $this->query->getModel()->getQualifiedKeyName(),
                     fn ($query) => $query->select('matches.id')
-                        ->from($this->buildSubSearch($columnGroups, $term), 'matches')
+                        ->from($this->buildSubSearch($term), 'matches')
                 )
             );
 
@@ -74,14 +66,14 @@ class EloquentSearchBuilder
             ->values();
     }
 
-    protected function buildSubSearch(Collection $columnGroups, string $term): QueryBuilder
+    protected function buildSubSearch(string $term): QueryBuilder
     {
         $query = with(
-            $columnGroups->first(),
+            $this->columnGroups->first(),
             fn ($columnGroup) => $this->buildUnionSub($columnGroup['relation'], $columnGroup['qualifiedColumns'], $term),
         );
 
-        $columnGroups->skip(1)->each(fn ($columnGroup) => $query->union(
+        $this->columnGroups->skip(1)->each(fn ($columnGroup) => $query->union(
             $this->buildUnionSub($columnGroup['relation'], $columnGroup['qualifiedColumns'], $term)
         ));
 
