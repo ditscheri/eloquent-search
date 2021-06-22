@@ -1,29 +1,13 @@
-# This is my package EloquentSearch
+**PACKAGE IN DEVELOPMENT, DO NOT USE YET**
+
+# Eloquent Search
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ditscheri/eloquent-search.svg?style=flat-square)](https://packagist.org/packages/ditscheri/eloquent-search)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ditscheri/eloquent-search/run-tests?label=tests)](https://github.com/ditscheri/eloquent-search/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ditscheri/eloquent-search/Check%20&%20fix%20styling?label=code%20style)](https://github.com/ditscheri/eloquent-search/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ditscheri/eloquent-search.svg?style=flat-square)](https://packagist.org/packages/ditscheri/eloquent-search)
 
----
-This repo can be used as to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this eloquent-search
-2. Run "./configure-eloquent-search.sh" to run a script that will replace all placeholders throughout all the files
-3. Remove this block of text.
-4. Have fun creating your package.
-5. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/eloquent-search.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/eloquent-search)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+This package lets you perform fast and local searches on your Eloquent Models. You can search foreign columns of related models too.
 
 ## Installation
 
@@ -31,13 +15,6 @@ You can install the package via composer:
 
 ```bash
 composer require ditscheri/eloquent-search
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --provider="Ditscheri\EloquentSearch\EloquentSearchServiceProvider" --tag="eloquent-search-migrations"
-php artisan migrate
 ```
 
 You can publish the config file with:
@@ -55,8 +32,35 @@ return [
 ## Usage
 
 ```php
-$eloquent-search = new Ditscheri\EloquentSearch();
-echo $eloquent-search->echoPhrase('Hello, Spatie!');
+// Model
+class Podcasts extends Model
+{
+    use \Ditscheri\EloquentSearch\Searchable;
+
+    /**
+     * The attributes that are searchable.
+     *
+     * @var string[]
+     */
+    protected array $searchable = [
+        'title', // make sure to add proper indexes to each of these columns
+        'description',
+        'author.first_name',
+        'author.last_name',
+        'series.title',
+        'series.tags.name',
+    ];
+}
+
+// Controller
+class PodcastController 
+{
+    public function index(Request $request)
+    {
+        return Podcast::search($request->input('q', null))->paginate();
+    }
+}
+
 ```
 
 ## Testing
