@@ -17,22 +17,9 @@ You can install the package via composer:
 composer require ditscheri/eloquent-search
 ```
 
-You can publish the config file with:
-```bash
-php artisan vendor:publish --provider="Ditscheri\EloquentSearch\EloquentSearchServiceProvider" --tag="eloquent-search-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
 ## Usage
 
 ```php
-// Model
 class Podcast extends Model
 {
     use \Ditscheri\EloquentSearch\Searchable;
@@ -47,12 +34,27 @@ class Podcast extends Model
         'description',
         'author.first_name',
         'author.last_name',
+        'comments.message',
         'series.title',
         'series.tags.name',
     ];
+
+    public function author()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function series()
+    {
+        return $this->belongsTo(Series::class);
+    }
 }
 
-// Controller
 class PodcastController 
 {
     public function index(Request $request)
