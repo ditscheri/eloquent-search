@@ -14,11 +14,18 @@ class EloquentSearchBuilder
 
     protected Collection $columnGroups;
 
-    public function __construct(Builder $query, array $columns)
+    /**
+     * Mode can either be "right" or "both"
+     */
+    protected string $mode = 'right';
+
+    public function __construct(Builder $query, array $columns, string $mode = 'right')
     {
         $this->query = $query;
 
         $this->columnGroups = $this->extractColumnGroups($columns);
+
+        $this->mode = $mode;
     }
 
     public function apply(string $term = null): Builder
@@ -33,7 +40,7 @@ class EloquentSearchBuilder
 
         collect(str_getcsv($term, ' ', '"'))
             ->filter()
-            ->map(fn (string $term): string => EloquentSearch::toLikeOperand($term))
+            ->map(fn (string $term): string => $this->toLikeOperand($term))
             ->each(
                 fn (string $term) => $this->query->whereIn(
                     $this->query->getModel()->getQualifiedKeyName(),
@@ -43,6 +50,21 @@ class EloquentSearchBuilder
             );
 
         return $this->query;
+    }
+
+    protected function toLikeOperand(string $term): string
+    {
+        $escaped = str_replace(
+            ['\\', '%', '_'],
+            ['\\\\', '\%', '\_'],
+            $term
+        );
+
+        if ($this->mode === 'both') {
+            return '%'.$escaped.'%';
+        }
+
+        return $escaped.'%';
     }
 
     protected function extractColumnGroups(array $searchable): Collection

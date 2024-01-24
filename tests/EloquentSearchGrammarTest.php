@@ -332,6 +332,44 @@ class EloquentSearchGrammarTest extends TestCase
     }
 
     /** @test */
+    public function it_can_search_on_both_ends()
+    {
+        $builder = BothSideUser::search('foo');
+
+        $innerSelect = '
+        select `matches`.`id` from (
+            (
+                select `users`.`id` as `id` from `users`
+                where (`users`.`name` like ?)
+            )
+            union
+            (
+                select `users`.`id` as `id` from `users`
+                where exists (
+                    select 1 from `posts`
+                    where `users`.`id` = `posts`.`user_id`
+                    and (`posts`.`title` like ? or `posts`.`excerpt` like ?)
+                )
+            )
+        ) as `matches`';
+
+        $this->assertSame(
+            $this->trimLines("
+                select * from `users` where `users`.`id` in (
+                   {$innerSelect}
+                )
+            "),
+            $builder->toSql()
+        );
+
+        $this->assertSame(
+            // wildcard on both sides here:
+            ['%foo%', '%foo%', '%foo%'],
+            $builder->getBindings()
+        );
+    }
+
+    /** @test */
     public function it_bails_out_for_empty_terms()
     {
         $builder = User::search(null);
@@ -408,5 +446,25 @@ class Comment extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+}
+
+class BothSideUser extends Model
+{
+    use Searchable;
+
+    protected $table = 'users';
+
+    protected array $searchable = [
+        'name',
+        'posts.title',
+        'posts.excerpt',
+    ];
+
+    protected $searchableMode = 'both';
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'user_id');
     }
 }

@@ -18,6 +18,7 @@ trait Searchable
      */
     public function scopeSearch(Builder $query, string $term = null, ?array $columns = null): Builder
     {
-        return (new EloquentSearchBuilder($query, $columns ?? $this->searchable))->apply($term);
+        return (new EloquentSearchBuilder($query, $columns ?? $this->searchable, $this->searchableMode ?? 'right'))
+            ->apply($term);
     }
 }
