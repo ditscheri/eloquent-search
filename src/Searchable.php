@@ -16,7 +16,7 @@ trait Searchable
      *    'author.profiles.description',
      * ];
      */
-    public function scopeSearch(Builder $query, string $term = null, ?array $columns = null): Builder
+    public function scopeSearch(Builder $query, ?string $term = null, ?array $columns = null): Builder
     {
         return (new EloquentSearchBuilder($query, $columns ?? $this->searchable, $this->searchableMode ?? 'right'))
             ->apply($term);

@@ -28,7 +28,7 @@ class EloquentSearchBuilder
         $this->mode = $mode;
     }
 
-    public function apply(string $term = null): Builder
+    public function apply(?string $term = null): Builder
     {
         if (empty($term)) {
             return $this->query;
