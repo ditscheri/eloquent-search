@@ -4,10 +4,11 @@ namespace Ditscheri\EloquentSearch\Tests;
 
 use Ditscheri\EloquentSearch\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use PHPUnit\Framework\Attributes\Test;
 
 class EloquentSearchGrammarTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_search_in_local_columns()
     {
         $builder = User::search('foo');
@@ -33,7 +34,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_multiple_words_in_local_columns()
     {
         $builder = User::search('foo bar');
@@ -62,7 +63,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_manipulate_columns()
     {
         $builder = User::search('foo', ['company']);
@@ -88,7 +89,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_in_one_foreign_column()
     {
         $builder = User::search('foo', [
@@ -119,7 +120,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_in_many_foreign_column()
     {
         $builder = User::search('foo bar', [
@@ -154,7 +155,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_combined()
     {
         $builder = User::search('foo bar', [
@@ -202,7 +203,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_nested_relations()
     {
         $builder = User::search('foo bar', [
@@ -246,7 +247,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_multiple_relations()
     {
         $builder = User::search('foo bar baz', [
@@ -331,7 +332,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_on_both_ends()
     {
         $builder = BothSideUser::search('foo');
@@ -369,7 +370,7 @@ class EloquentSearchGrammarTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_bails_out_for_empty_terms()
     {
         $builder = User::search(null);
